@@ -1,0 +1,49 @@
+module TEST_DECODER; 
+ // Inputs 
+ reg [6:0] hamming_code; 
+ // Outputs 
+ wire [3:0] data_out; 
+ // Instantiate the Unit Under Test (UUT) 
+ hamming74_decoder uut ( 
+ .hamming_code(hamming_code), 
+ .data_out(data_out) 
+ ); 
+ initial begin 
+ $display($time, "TEST START"); 
+ $monitor($time, " hamming_coder = %b, data_out = %d ", 
+hamming_code, data_out); 
+ 
+ // data chay tu 0 den 15 --> hamming_code 
+ #1; hamming_code = 7'b000_0_0_00; // so 0 thap phan 
+ #1; hamming_code = 7'b000_0_1_11; 
+ #1; hamming_code = 7'b001_1_0_01; 
+ #1; hamming_code = 7'b001_1_1_10;
+ #1; hamming_code = 7'b010_1_0_10; 
+ #1; hamming_code = 7'b010_1_1_01; 
+ #1; hamming_code = 7'b011_0_0_11; 
+ #1; hamming_code = 7'b011_0_1_00; 
+ #1; hamming_code = 7'b100_1_0_11; 
+ #1; hamming_code = 7'b100_1_1_00; 
+ #1; hamming_code = 7'b101_0_0_10; 
+ #1; hamming_code = 7'b101_0_1_01; 
+ #1; hamming_code = 7'b110_0_0_01; 
+ #1; hamming_code = 7'b110_0_1_10; 
+ #1; hamming_code = 7'b111_1_0_00; 
+   #1; hamming_code = 7'b111_1_1_11;    // so 15 thap phan  
+ 
+ #1 $display($time, "1 bit error - bit 1"); // gia su so 0 thap
+phan bi loi tai bit 1 
+ hamming_code = 7'b000_0_0_01; 
+ #1 $display($time, "1 bit error - bit 1"); // gia su so 0 thap
+phan bi loi tai bit 4 
+ hamming_code = 7'b000_1_0_00; 
+ #1 $display($time, "1 bit error - bit 1"); // gia su so 0 thap
+phan bi loi 2 bit 5 6 
+ hamming_code = 7'b011_0_0_00; 
+ #1; hamming_code = 7'b000_0_0_00; 
+ 
+ $display($time, "TEST STOP"); 
+ $stop; 
+ end 
+ 
+endmodule 

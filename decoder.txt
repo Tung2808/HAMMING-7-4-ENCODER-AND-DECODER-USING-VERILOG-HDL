@@ -1,0 +1,33 @@
+module hamming74_decoder( 
+    input [6:0] hamming_code, 
+    output [3:0] data_out 
+); 
+
+reg [2:0] parity; 
+reg [6:0] error_pattern; 
+wire [6:0] corrected_hamming_code; 
+
+always @(*) begin 
+ parity[0] = hamming_code[0] ^ hamming_code[2] ^ hamming_code[4] ^ 
+hamming_code[6]; 
+ parity[1] = hamming_code[1] ^ hamming_code[2] ^ hamming_code[5] ^ 
+hamming_code[6]; 
+ parity[2] = hamming_code[3] ^ hamming_code[4] ^ hamming_code[5] ^ 
+hamming_code[6]; 
+end 
+always @(*) begin 
+    case(parity) 
+        3'b000: error_pattern = 7'b0000000; 
+        3'b001: error_pattern = 7'b0000001; 
+        3'b010: error_pattern = 7'b0000010; 
+        3'b011: error_pattern = 7'b0000100; 
+        3'b100: error_pattern = 7'b0001000; 
+        3'b101: error_pattern = 7'b0010000; 
+        3'b110: error_pattern = 7'b0100000; 
+        3'b111: error_pattern = 7'b1000000; 
+    endcase 
+end 
+assign corrected_hamming_code = error_pattern ^ hamming_code;                 
+assign  data_out={corrected_hamming_code[6:4],  
+corrected_hamming_code[2]}; 
+endmodule 
